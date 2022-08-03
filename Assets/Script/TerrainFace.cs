@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TerrainFace
 {
+    ShapeGenerator shapeGenerator;
     Mesh mesh;
     int resolution;
     Vector3 localUp;
@@ -11,9 +12,10 @@ public class TerrainFace
     Vector3 axisB;
 
     // 생성자
-    public TerrainFace(Mesh mesh, int resolution, Vector3 localUp)
+    public TerrainFace(ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
     {
         // 필드 초기화
+        this.shapeGenerator = shapeGenerator;
         this.mesh = mesh;
         this.resolution = resolution;
         this.localUp = localUp;
@@ -44,7 +46,7 @@ public class TerrainFace
                 Vector3 pointOnUnitCube = localUp + (percent.x - .5f) * 2 * axisA + (percent.y - .5f) * 2 * axisB;
                 // 벡터값을 정규화하여 점들이 원을 이루도록함
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
-                vertices[i] = pointOnUnitSphere;
+                vertices[i] = shapeGenerator.CalculatePointOnPlanet(pointOnUnitSphere);
 
                 // 마지막 좌표 외 전부 실행
                 if (x != resolution - 1 && y != resolution - 1)
