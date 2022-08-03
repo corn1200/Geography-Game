@@ -7,6 +7,17 @@ public class Planet : MonoBehaviour
     // 값 범위 지정
     [Range(2, 256)]
     public int resolution = 10;
+    public bool autoUpdate = true;
+
+    public ShapeSettings shapeSettings;
+    public ColorSetting colorSetting;
+
+    [HideInInspector]
+    public bool shapeSettingsFoldout;
+    [HideInInspector]
+    public bool colorSettingFoldout;
+
+    ShapeGenerator shapeGenerator;
 
     // 메쉬필터 생성 후 배열에 오브젝트 저장, 인스펙터 창에서 수정은 못하게 설정
     [SerializeField, HideInInspector]
@@ -16,13 +27,13 @@ public class Planet : MonoBehaviour
     // 스크립트 또는 인스펙터 상에서 변수의 값이 변경될 때 호출
     private void OnValidate()
     {
-        // 초기화 & 메쉬 지정
-        Initialize();
-        GenerateMesh();
+        GeneratePlanet();
     }
 
     void Initialize()
     {
+        shapeGenerator = new ShapeGenerator(shapeSettings);
+
         // 메쉬필터가 없을 경우 새로 생성
         if (meshFilters == null || meshFilters.Length == 0)
         {
@@ -54,7 +65,32 @@ public class Planet : MonoBehaviour
 
             // 새 지층면을 메쉬와 함께 생성
             // 현재 좌표 범위, 6면 중 한 방향을 지정
-            terrainFaces[i] = new TerrainFace(meshFilters[i].sharedMesh, resolution, directions[i]);
+            terrainFaces[i] = new TerrainFace(shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
+        }
+    }
+
+    public void GeneratePlanet()
+    {
+        Initialize();
+        GenerateMesh();
+        GenerateColors();
+    }
+
+    public void OnShapeSettingsUpdated()
+    {
+        if (autoUpdate)
+        {
+            Initialize();
+            GenerateMesh();
+        }
+    }
+
+    public void OnColorSettingsUpdated()
+    {
+        if (autoUpdate)
+        {
+            Initialize();
+            GenerateColors();
         }
     }
 
@@ -66,6 +102,14 @@ public class Planet : MonoBehaviour
         {
             // 지층면의 메쉬 지정
             face.ConstructMesh();
+        }
+    }
+
+    void GenerateColors()
+    {
+        foreach (MeshFilter m in meshFilters)
+        {
+            m.GetComponent<MeshRenderer>().sharedMaterial.color = colorSetting.planetColor;
         }
     }
 }
