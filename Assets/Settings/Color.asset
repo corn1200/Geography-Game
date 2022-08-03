@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 218f3927888cff943b21462136029698, type: 3}
   m_Name: Color
   m_EditorClassIdentifier: Assembly-CSharp::ColorSetting
-  planetColor: {r: 0.0980392, g: 0.77254903, b: 0.11353717, a: 0}
+  planetColor: {r: 1, g: 0.3160377, b: 0.5581001, a: 0}
