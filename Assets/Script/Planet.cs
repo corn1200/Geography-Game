@@ -69,6 +69,7 @@ public class Planet : MonoBehaviour
         }
     }
 
+    // 행성 재생성
     public void GeneratePlanet()
     {
         Initialize();
@@ -76,6 +77,7 @@ public class Planet : MonoBehaviour
         GenerateColors();
     }
 
+    // 색상 값이 변경되면 행성을 재생성하고 색상을 재지정한다
     public void OnShapeSettingsUpdated()
     {
         if (autoUpdate)
@@ -85,6 +87,7 @@ public class Planet : MonoBehaviour
         }
     }
 
+    // 색상 값이 변경되면 행성을 재생성하고 색상을 재지정한다
     public void OnColorSettingsUpdated()
     {
         if (autoUpdate)
@@ -105,6 +108,7 @@ public class Planet : MonoBehaviour
         }
     }
 
+    // 메쉬 색상 지정 함수
     void GenerateColors()
     {
         foreach (MeshFilter m in meshFilters)
