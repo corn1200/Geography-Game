@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShapeGenerator : MonoBehaviour
+public class ShapeGenerator
 {
     ShapeSettings settings;
     // 여러 클래스의 노이즈 필터를 만들기 위해 노이즈 필터 인터페이스로 대체
     NoiseFilterInterface[] noiseFilter;
+    public MinMax elevationMinMax;
 
     // 생성자
-    public ShapeGenerator(ShapeSettings settings)
+    public void UpdateSettings(ShapeSettings settings)
     {
         this.settings = settings;
         // 노이즈 레이어 개수만큼 노이즈 필터 배열 생성
@@ -20,6 +21,7 @@ public class ShapeGenerator : MonoBehaviour
             // 노이즈 레이어에서 선택된 노이즈 분류에 따라 노이즈 필터 생성
             noiseFilter[i] = NoiseFilterFactory.CreateNoiseFilter(settings.noiseLayers[i].noiseSettings);
         }
+        elevationMinMax = new MinMax();
     }
 
     // 지정한 크기 값만큼 Planet 크기 키우기
@@ -52,6 +54,8 @@ public class ShapeGenerator : MonoBehaviour
                 elevation += noiseFilter[i].Evaluate(pointOnUnitSphere) * mask;
             }
         }
-        return pointOnUnitSphere * settings.planetRadius * (1 + elevation);
+        elevation = settings.planetRadius * (1 + elevation);
+        elevationMinMax.AddValue(elevation);
+        return pointOnUnitSphere * elevation;
     }
 }
