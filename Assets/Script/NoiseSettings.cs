@@ -5,14 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class NoiseSettings
 {
+    // 필터 타입 선택 필드
     public enum FilterType { Simple, Rigid };
     public FilterType filterType;
 
+    // 심플/리지드 노이즈 세팅으로 분리, 필터 타입에 따라 선택
     [ConditionalHide("filterType", 0)]
     public SimpleNoiseSettings simpleNoiseSettings;
     [ConditionalHide("filterType", 1)]
     public RigidNoiseSettings rigidNoiseSettings;
 
+    // 심플 노이즈 세팅일 때의 세팅 값
     [System.Serializable]
     public class SimpleNoiseSettings
     {
@@ -29,6 +32,7 @@ public class NoiseSettings
         public float minValue;
     }
 
+    // 리지드 노이즈 세팅일 때의 세팅 값, 심플 노이즈 세팅을 상속함
     [System.Serializable]
     public class RigidNoiseSettings : SimpleNoiseSettings
     {

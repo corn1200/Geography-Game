@@ -8,6 +8,7 @@ public class Planet : MonoBehaviour
     [Range(2, 256)]
     public int resolution = 10;
     public bool autoUpdate = true;
+    // 렌더링할 메쉬 선택 방향
     public enum FaceRenderMask { All, Top, Bottom, Left, Right, Front, Back };
     public FaceRenderMask faceRenderMask;
 
@@ -68,6 +69,7 @@ public class Planet : MonoBehaviour
             // 새 지층면을 메쉬와 함께 생성
             // 현재 좌표 범위, 6면 중 한 방향을 지정
             terrainFaces[i] = new TerrainFace(shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
+            // 모든 방향 렌더링이거나, 선택한 렌더링 방향일 경우에만 오브젝트 활성화
             bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             meshFilters[i].gameObject.SetActive(renderFace);
         }
@@ -104,8 +106,10 @@ public class Planet : MonoBehaviour
     // 메쉬 생성 함수
     void GenerateMesh()
     {
+        // 6면 순회
         for(int i = 0; i < 6; i++)
         {
+            // 오브젝트 활성화되어 있을 경우에만 메쉬 생성
             if(meshFilters[i].gameObject.activeSelf)
             {
                 terrainFaces[i].ConstructMesh();

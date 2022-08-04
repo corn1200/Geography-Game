@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShapeGenerator : MonoBehaviour
 {
     ShapeSettings settings;
+    // 여러 클래스의 노이즈 필터를 만들기 위해 노이즈 필터 인터페이스로 대체
     NoiseFilterInterface[] noiseFilter;
 
     // 생성자
@@ -16,6 +17,7 @@ public class ShapeGenerator : MonoBehaviour
         // 노이즈 필터를 노이즈 레이어의 세팅 값으로 초기화
         for (int i = 0; i < noiseFilter.Length; i++)
         {
+            // 노이즈 레이어에서 선택된 노이즈 분류에 따라 노이즈 필터 생성
             noiseFilter[i] = NoiseFilterFactory.CreateNoiseFilter(settings.noiseLayers[i].noiseSettings);
         }
     }
