@@ -20,22 +20,18 @@ public class Planet : MonoBehaviour
     [HideInInspector]
     public bool colorSettingFoldout;
 
-    ShapeGenerator shapeGenerator;
+    ShapeGenerator shapeGenerator = new ShapeGenerator();
+    ColorGenerator colorGenerator = new ColorGenerator();
 
     // 메쉬필터 생성 후 배열에 오브젝트 저장, 인스펙터 창에서 수정은 못하게 설정
     [SerializeField, HideInInspector]
     MeshFilter[] meshFilters;
     TerrainFace[] terrainFaces;
 
-    // 스크립트 또는 인스펙터 상에서 변수의 값이 변경될 때 호출
-    private void OnValidate()
-    {
-        GeneratePlanet();
-    }
-
     void Initialize()
     {
-        shapeGenerator = new ShapeGenerator(shapeSettings);
+        shapeGenerator.UpdateSettings(shapeSettings);
+        colorGenerator.UpdateSettings(colorSetting);
 
         // 메쉬필터가 없을 경우 새로 생성
         if (meshFilters == null || meshFilters.Length == 0)
@@ -60,11 +56,12 @@ public class Planet : MonoBehaviour
                 meshObj.transform.parent = transform;
 
                 // 스탠다드 머테리얼을 추가
-                meshObj.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("Standard"));
+                meshObj.AddComponent<MeshRenderer>();
                 // 메쉬 배열에 생성한 메쉬 오브젝트를 추가
                 meshFilters[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilters[i].sharedMesh = new Mesh();
             }
+            meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = colorSetting.planetMaterial;
 
             // 새 지층면을 메쉬와 함께 생성
             // 현재 좌표 범위, 6면 중 한 방향을 지정
@@ -115,14 +112,13 @@ public class Planet : MonoBehaviour
                 terrainFaces[i].ConstructMesh();
             }
         }
+
+        colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
     }
 
     // 메쉬 색상 지정 함수
     void GenerateColors()
     {
-        foreach (MeshFilter m in meshFilters)
-        {
-            m.GetComponent<MeshRenderer>().sharedMaterial.color = colorSetting.planetColor;
-        }
+        colorGenerator.UpdateColor();
     }
 }
