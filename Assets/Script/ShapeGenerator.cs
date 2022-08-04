@@ -5,18 +5,18 @@ using UnityEngine;
 public class ShapeGenerator : MonoBehaviour
 {
     ShapeSettings settings;
-    NoiseFilter[] noiseFilter;
+    NoiseFilterInterface[] noiseFilter;
 
     // 생성자
     public ShapeGenerator(ShapeSettings settings)
     {
         this.settings = settings;
         // 노이즈 레이어 개수만큼 노이즈 필터 배열 생성
-        noiseFilter = new NoiseFilter[settings.noiseLayers.Length];
+        noiseFilter = new NoiseFilterInterface[settings.noiseLayers.Length];
         // 노이즈 필터를 노이즈 레이어의 세팅 값으로 초기화
         for (int i = 0; i < noiseFilter.Length; i++)
         {
-            noiseFilter[i] = new NoiseFilter(settings.noiseLayers[i].noiseSettings);
+            noiseFilter[i] = NoiseFilterFactory.CreateNoiseFilter(settings.noiseLayers[i].noiseSettings);
         }
     }
 
