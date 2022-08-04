@@ -6,5 +6,6 @@ using UnityEngine;
 public class ColorSetting : ScriptableObject
 {
     // 색상 값
-    public Color planetColor;
+    public Gradient gradient;
+    public Material planetMaterial;
 }
