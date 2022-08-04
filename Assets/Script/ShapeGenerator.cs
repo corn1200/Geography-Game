@@ -7,9 +7,10 @@ public class ShapeGenerator
     ShapeSettings settings;
     // 여러 클래스의 노이즈 필터를 만들기 위해 노이즈 필터 인터페이스로 대체
     NoiseFilterInterface[] noiseFilter;
+    // 노이즈 최대/최소값
     public MinMax elevationMinMax;
 
-    // 생성자
+    // 세팅 업데이트 함수
     public void UpdateSettings(ShapeSettings settings)
     {
         this.settings = settings;
@@ -21,6 +22,7 @@ public class ShapeGenerator
             // 노이즈 레이어에서 선택된 노이즈 분류에 따라 노이즈 필터 생성
             noiseFilter[i] = NoiseFilterFactory.CreateNoiseFilter(settings.noiseLayers[i].noiseSettings);
         }
+        // 노이즈 최대/최소값 초기화
         elevationMinMax = new MinMax();
     }
 
@@ -54,6 +56,7 @@ public class ShapeGenerator
                 elevation += noiseFilter[i].Evaluate(pointOnUnitSphere) * mask;
             }
         }
+        // 노이즈 최대/최소값에 계산한 노이즈 값 저장
         elevation = settings.planetRadius * (1 + elevation);
         elevationMinMax.AddValue(elevation);
         return pointOnUnitSphere * elevation;

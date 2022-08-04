@@ -20,6 +20,7 @@ public class Planet : MonoBehaviour
     [HideInInspector]
     public bool colorSettingFoldout;
 
+    // 메쉬 생성 클래스와 색상 지정 클래스 초기화
     ShapeGenerator shapeGenerator = new ShapeGenerator();
     ColorGenerator colorGenerator = new ColorGenerator();
 
@@ -30,6 +31,7 @@ public class Planet : MonoBehaviour
 
     void Initialize()
     {
+        // 각 세팅 업데이트
         shapeGenerator.UpdateSettings(shapeSettings);
         colorGenerator.UpdateSettings(colorSetting);
 
@@ -55,12 +57,12 @@ public class Planet : MonoBehaviour
                 // 생성한 메쉬 오브젝트의 부모를 Planet 오브젝트로 지정
                 meshObj.transform.parent = transform;
 
-                // 스탠다드 머테리얼을 추가
                 meshObj.AddComponent<MeshRenderer>();
                 // 메쉬 배열에 생성한 메쉬 오브젝트를 추가
                 meshFilters[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilters[i].sharedMesh = new Mesh();
             }
+            // 행성 머테리얼을 삽입
             meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = colorSetting.planetMaterial;
 
             // 새 지층면을 메쉬와 함께 생성
@@ -113,12 +115,14 @@ public class Planet : MonoBehaviour
             }
         }
 
+        // 노이즈 최대/최소값 변경 시 색상 지정 클래스에 값 전달
         colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
     }
 
     // 메쉬 색상 지정 함수
     void GenerateColors()
     {
+        // 색상 업데이트
         colorGenerator.UpdateColor();
     }
 }
