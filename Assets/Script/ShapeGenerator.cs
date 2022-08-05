@@ -46,7 +46,7 @@ public class ShapeGenerator
         }
 
         // 노이즈 필터 개수만큼 반복
-        for (int i = 0; i < noiseFilter.Length; i++)
+        for (int i = 1; i < noiseFilter.Length; i++)
         {
             // 노이즈 레이어 사용 체크 시 실행
             if (settings.noiseLayers[i].enabled)
