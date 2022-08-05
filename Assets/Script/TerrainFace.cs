@@ -33,6 +33,7 @@ public class TerrainFace
         // 점을 잇는 정점 총 개수 * 면
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triangleIndex = 0;
+        Vector2[] uv = mesh.uv;
 
         // x, y 범위만큼 반복
         for (int y = 0; y < resolution; y++)
@@ -69,5 +70,29 @@ public class TerrainFace
         mesh.triangles = triangles;
         // 메쉬끼리 이어준다
         mesh.RecalculateNormals();
+        mesh.uv = uv;
+    }
+
+    public void UpdateUVs(ColorGenerator colorGenerator)
+    {
+        Vector2[] uv = new Vector2[resolution * resolution];
+
+        // x, y 범위만큼 반복
+        for (int y = 0; y < resolution; y++)
+        {
+            for (int x = 0; x < resolution; x++)
+            {
+                // 각 정점을 차례로 순회하고 다음 행 순서로 넘어가도록 함
+                int i = x + y * resolution;
+                // 각 점의 위치를 계산하고 배열에 삽입
+                Vector2 percent = new Vector2(x, y) / (resolution - 1);
+                Vector3 pointOnUnitCube = localUp + (percent.x - .5f) * 2 * axisA + (percent.y - .5f) * 2 * axisB;
+                // 벡터값을 정규화하여 점들이 원을 이루도록함
+                Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
+
+                uv[i] = new Vector2(colorGenerator.BiomePercentFromPoint(pointOnUnitSphere), 0);
+            }
+        }
+        mesh.uv = uv;
     }
 }
