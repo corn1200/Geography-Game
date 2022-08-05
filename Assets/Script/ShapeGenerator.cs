@@ -46,6 +46,7 @@ public class ShapeGenerator
         }
 
         // 노이즈 필터 개수만큼 반복
+        // 0번 인덱스는 이미 실행했기 때문에 1번 인덱스부터 시작
         for (int i = 1; i < noiseFilter.Length; i++)
         {
             // 노이즈 레이어 사용 체크 시 실행

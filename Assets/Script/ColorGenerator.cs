@@ -8,16 +8,20 @@ public class ColorGenerator
     ColorSetting setting;
     Texture2D texture;
     const int textureResolution = 50;
+    // 바이옴 필터
     NoiseFilterInterface biomeNoiseFilter;
 
     // 세팅 업데이트
     public void UpdateSettings(ColorSetting setting)
     {
         this.setting = setting;
+        // 텍스쳐가 null이거나 텍스쳐 height와 바이옴 개수가 일치하지 않을 시 실행
         if (texture == null || texture.height != setting.biomeColorSettings.biomes.Length)
         {
+            // 텍스쳐 초기화
             texture = new Texture2D(textureResolution, setting.biomeColorSettings.biomes.Length, TextureFormat.RGBA32, false);
         }
+        // 바이옴 노이즈 필터 초기화
         biomeNoiseFilter = NoiseFilterFactory.CreateNoiseFilter(setting.biomeColorSettings.noiseSettings);
     }
 
@@ -27,6 +31,7 @@ public class ColorGenerator
         setting.planetMaterial.SetVector("_elevationMinMax", new Vector4(elevationMinMax.Min, elevationMinMax.Max));
     }
 
+    // 바이옴 비율 반환 함수
     public float BiomePercentFromPoint(Vector3 pointOnUnitSphere)
     {
         float heightPercent = (pointOnUnitSphere.y + 1) / 2f;
@@ -49,12 +54,13 @@ public class ColorGenerator
     // 색상 업데이트
     public void UpdateColor()
     {
-        // 색상 단계만큼 배열 생성
+        // 텍스쳐 크기만큼 색상 배열 생성
         Color[] colors = new Color[texture.width * texture.height];
         int colorIndex = 0;
+        // 바이옴 배열 순회
         foreach (var biome in setting.biomeColorSettings.biomes)
         {
-            // 색상 배열만큼 순회
+            // 색상 단계 순회
             for (int i = 0; i < textureResolution; i++)
             {
                 // 단계별 색상 추출 후 저장

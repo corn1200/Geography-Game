@@ -33,6 +33,7 @@ public class TerrainFace
         // 점을 잇는 정점 총 개수 * 면
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triangleIndex = 0;
+        // UV 초기화
         Vector2[] uv = mesh.uv;
 
         // x, y 범위만큼 반복
@@ -70,9 +71,11 @@ public class TerrainFace
         mesh.triangles = triangles;
         // 메쉬끼리 이어준다
         mesh.RecalculateNormals();
+        // 메쉬의 UV 초기화
         mesh.uv = uv;
     }
 
+    // UV 업데이트 함수
     public void UpdateUVs(ColorGenerator colorGenerator)
     {
         Vector2[] uv = new Vector2[resolution * resolution];
