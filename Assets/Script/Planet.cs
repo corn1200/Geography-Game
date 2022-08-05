@@ -106,10 +106,10 @@ public class Planet : MonoBehaviour
     void GenerateMesh()
     {
         // 6면 순회
-        for(int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++)
         {
             // 오브젝트 활성화되어 있을 경우에만 메쉬 생성
-            if(meshFilters[i].gameObject.activeSelf)
+            if (meshFilters[i].gameObject.activeSelf)
             {
                 terrainFaces[i].ConstructMesh();
             }
@@ -124,5 +124,14 @@ public class Planet : MonoBehaviour
     {
         // 색상 업데이트
         colorGenerator.UpdateColor();
+        // 6면 순회
+        for (int i = 0; i < 6; i++)
+        {
+            // 오브젝트 활성화되어 있을 경우에만 메쉬 생성
+            if (meshFilters[i].gameObject.activeSelf)
+            {
+                terrainFaces[i].UpdateUVs(colorGenerator);
+            }
+        }
     }
 }
