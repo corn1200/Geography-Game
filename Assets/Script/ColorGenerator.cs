@@ -19,7 +19,7 @@ public class ColorGenerator
         if (texture == null || texture.height != setting.biomeColorSettings.biomes.Length)
         {
             // 텍스쳐 초기화
-            texture = new Texture2D(textureResolution, setting.biomeColorSettings.biomes.Length, TextureFormat.RGBA32, false);
+            texture = new Texture2D(textureResolution * 2, setting.biomeColorSettings.biomes.Length, TextureFormat.RGBA32, false);
         }
         // 바이옴 노이즈 필터 초기화
         biomeNoiseFilter = NoiseFilterFactory.CreateNoiseFilter(setting.biomeColorSettings.noiseSettings);
@@ -61,10 +61,17 @@ public class ColorGenerator
         foreach (var biome in setting.biomeColorSettings.biomes)
         {
             // 색상 단계 순회
-            for (int i = 0; i < textureResolution; i++)
+            for (int i = 0; i < textureResolution * 2; i++)
             {
-                // 단계별 색상 추출 후 저장
-                Color gradientColor = biome.gradient.Evaluate(i / (textureResolution - 1f));
+                Color gradientColor;
+                if (i < textureResolution)
+                {
+                    gradientColor = setting.oceanColor.Evaluate(i / (textureResolution - 1f));
+                }
+                else
+                {
+                    gradientColor = biome.gradient.Evaluate((i - textureResolution) / (textureResolution - 1f));
+                }
                 Color tintColor = biome.tint;
                 colors[colorIndex] = gradientColor * (1 - biome.tintPercent) + tintColor * biome.tintPercent;
                 colorIndex++;

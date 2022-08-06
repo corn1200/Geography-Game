@@ -9,6 +9,7 @@ public class ColorSetting : ScriptableObject
     public Material planetMaterial;
     // 바이옴 색상 세팅 필드
     public BiomeColorSettings biomeColorSettings;
+    public Gradient oceanColor;
 
     // 바이옴 색상 세팅 클래스
     [System.Serializable]
