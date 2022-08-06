@@ -27,7 +27,7 @@ public class ShapeGenerator
     }
 
     // 지정한 크기 값만큼 Planet 크기 키우기
-    public Vector3 CalculatePointOnPlanet(Vector3 pointOnUnitSphere)
+    public float CalculateUnscaleElevation(Vector3 pointOnUnitSphere)
     {
         float firstLayerValue = 0;
         float elevation = 0;
@@ -58,8 +58,14 @@ public class ShapeGenerator
             }
         }
         // 노이즈 최대/최소값에 계산한 노이즈 값 저장
-        elevation = settings.planetRadius * (1 + elevation);
         elevationMinMax.AddValue(elevation);
-        return pointOnUnitSphere * elevation;
+        return elevation;
+    }
+
+    public float GetScaledElevation(float unscaledElevation)
+    {
+        float elevation = Mathf.Max(0, unscaledElevation);
+        elevation = settings.planetRadius * (1 + elevation);
+        return elevation;
     }
 }
