@@ -34,7 +34,7 @@ public class TerrainFace
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triangleIndex = 0;
         // UV 초기화
-        Vector2[] uv = mesh.uv;
+        Vector2[] uv = (mesh.uv.Length == vertices.Length) ? mesh.uv : new Vector2[vertices.Length];
 
         // x, y 범위만큼 반복
         for (int y = 0; y < resolution; y++)
@@ -48,7 +48,9 @@ public class TerrainFace
                 Vector3 pointOnUnitCube = localUp + (percent.x - .5f) * 2 * axisA + (percent.y - .5f) * 2 * axisB;
                 // 벡터값을 정규화하여 점들이 원을 이루도록함
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
-                vertices[i] = shapeGenerator.CalculatePointOnPlanet(pointOnUnitSphere);
+                float unscaledElevation = shapeGenerator.CalculateUnscaleElevation(pointOnUnitSphere);
+                vertices[i] = pointOnUnitSphere * shapeGenerator.GetScaledElevation(unscaledElevation);
+                uv[i].y = unscaledElevation;
 
                 // 마지막 좌표 외 전부 실행
                 if (x != resolution - 1 && y != resolution - 1)
@@ -78,7 +80,7 @@ public class TerrainFace
     // UV 업데이트 함수
     public void UpdateUVs(ColorGenerator colorGenerator)
     {
-        Vector2[] uv = new Vector2[resolution * resolution];
+        Vector2[] uv = mesh.uv;
 
         // x, y 범위만큼 반복
         for (int y = 0; y < resolution; y++)
@@ -93,7 +95,7 @@ public class TerrainFace
                 // 벡터값을 정규화하여 점들이 원을 이루도록함
                 Vector3 pointOnUnitSphere = pointOnUnitCube.normalized;
 
-                uv[i] = new Vector2(colorGenerator.BiomePercentFromPoint(pointOnUnitSphere), 0);
+                uv[i].x = colorGenerator.BiomePercentFromPoint(pointOnUnitSphere);
             }
         }
         mesh.uv = uv;
