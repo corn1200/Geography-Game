@@ -36,7 +36,7 @@ public class SimpleNoiseFilter : NoiseFilterInterface
         }
 
         // 노이즈 값 리턴
-        noiseValue = Mathf.Max(0, noiseValue - settings.minValue);
+        noiseValue = noiseValue - settings.minValue;
         return noiseValue * settings.strength;
     }
 }
